@@ -1,28 +1,65 @@
-var inc = 0.01;
+var scl = 10;
+var cols, rows;
+var inc = 0.1;
+
+var zoff = 0;
+
+var fr;
+
+var particle = [];
+
+var flowField;
+
 function setup() {
   createCanvas(400, 400);
+  cols = floor(width / scl);
+  rows = floor(height / scl);
+  fr = createP('')
+
+  flowField = new Array(cols * rows);
+
+  for(var i = 0; i< 200; i++){
+    particle[i] = new Particle();
+  }
 }
 
 
 
 function draw() {
+  background(255);
+
   var yoff = 0;
-  noiseDetail(28);
-  loadPixels();
-  for (var y = 0; y < height; y++){
+  //noiseDetail(20, 0.7);
+  for (var y = 0; y < rows; y++){
     var xoff = 0;
-    for (var x = 0; x < width; x++){
-      var index = (x + y * width) * 4;
-      var r = noise(xoff, yoff) * 255;
-      pixels[index+0] = r;
-      pixels[index+1] = r;
-      pixels[index+2] = r;
-      pixels[index+3] = 255;
+    for (var x = 0; x < cols; x++){
+      var index = x + y * cols; 
+      var angle = noise(xoff, yoff, zoff) * TWO_PI * 4;
+      var v = p5.Vector.fromAngle(angle);
+      v.setMag(1);
+      flowField[index] = v;
       xoff += inc;
+      stroke(0, 50);
+      // push();
+      // translate(x * scl, y * scl);
+      // rotate(v.heading());
+      // strokeWeight(1);
+      // line(0, 0, scl, 0);
+      // pop();
+      
     }
     yoff += inc;
+
+    zoff += 0.0004;
     
   }
-  updatePixels();
+
+  for(var i = 0; i < particle.length; i++){
+    particle[i].follow(flowField);
+    particle[i].update();
+    particle[i].show();
+    particle[i].edges();
+  }
+  fr.html(floor(frameRate()));
   //noLoop();
 }
