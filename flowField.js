@@ -11,23 +11,23 @@ var particle = [];
 var flowField;
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(1200, 800);
+  colorMode(HSB, 255);
   cols = floor(width / scl);
   rows = floor(height / scl);
   fr = createP('')
 
   flowField = new Array(cols * rows);
 
-  for(var i = 0; i< 1000; i++){
+  for(var i = 0; i< 5000; i++){
     particle[i] = new Particle();
   }
+  background(255);
 }
 
 
 
 function draw() {
-  background(255);
-
   var yoff = 0;
   //noiseDetail(20, 0.7);
   for (var y = 0; y < rows; y++){
@@ -57,8 +57,8 @@ function draw() {
   for(var i = 0; i < particle.length; i++){
     particle[i].follow(flowField);
     particle[i].update();
-    particle[i].show();
     particle[i].edges();
+    particle[i].show();
   }
   fr.html(floor(frameRate()));
   //noLoop();
