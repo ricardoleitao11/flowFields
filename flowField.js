@@ -18,7 +18,7 @@ function setup() {
 
   flowField = new Array(cols * rows);
 
-  for(var i = 0; i< 200; i++){
+  for(var i = 0; i< 1000; i++){
     particle[i] = new Particle();
   }
 }
